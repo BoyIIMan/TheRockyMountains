@@ -1,0 +1,3 @@
+Step 1 generate terraform base by reading documentations 
+step 2 create all resource IaC templates 
+step 3 Deploy terraform to azure 
