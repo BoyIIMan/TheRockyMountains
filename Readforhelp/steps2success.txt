@@ -1,3 +1,10 @@
-Step 1 generate terraform base by reading documentations 
-step 2 create all resource IaC templates 
-step 3 Deploy terraform to azure 
+#Steps
+
+1 Create repo structure of the lab
+2 Fill in modules with baseline resources
+3 fill out a test profile 
+4 deploy a test profile 
+    - terraform init, apply , deploy
+4.5 take down test profile 
+
+5 fill and deploy a actual profile and 
