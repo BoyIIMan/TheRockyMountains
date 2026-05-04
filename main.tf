@@ -14,11 +14,17 @@ provider "azurerm" {
   features {}
 }
 
+# -----------------------------
+# Resource Group 
+# -----------------------------
+# This is being used to iterate over the resource groups defined in the variable files and create them based on whats defined.
 resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
+  for_each = var.resource_groups
+  
+  name     = each.value.name
+  location = each.value.location
+  tags     = var.tags
 }
-
 # -----------------------------
 # Networking Module
 # -----------------------------
