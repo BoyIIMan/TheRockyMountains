@@ -13,12 +13,8 @@ terraform.tfstate.backup
 
 # -----------------------------
 # Sensitive variable files
-# -----------------------------
-*.tfvars
+# ----------------------------
 *.auto.tfvars
-
-# Allow safe profile configs
-!labs/*.tfvars
 
 # -----------------------------
 # Environment variables
