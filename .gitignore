@@ -18,7 +18,7 @@ terraform.tfstate.backup
 *.auto.tfvars
 
 # Allow safe profile configs
-!profiles/*.tfvars
+!labs/*.tfvars
 
 # -----------------------------
 # Environment variables

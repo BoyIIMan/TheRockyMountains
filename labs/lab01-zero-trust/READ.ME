@@ -1,13 +1,104 @@
+# Lab Description
+
+
+
+# Network Configuration
+
+This lab creates a simple network architecture consisting of a vnet with 4 subnets each seperated for the purpose of securely segmenting traffic through the use of NSGs. 
+
+VNET 
+db subnet with db-nsg 
+web subnet with web-nsg
+management subnet with management-nsg
+app subnet with app-nsg
+
+After the initial configuration of these network components I will configure tailored NSG rules for each.
+
+ ### NSG LOGIC ###
+        {
+            ## Network Security Group Logic
+
+            The goal of the NSG design is to enforce segmentation between the major tiers of the lab environment: management, web, app, and database. Each subnet has a different trust level and should only allow the traffic required for its role.
+
+            This lab follows a basic zero-trust mindset: no subnet should be trusted by default, and traffic should only be allowed when there is a clear reason for it. Public access should be limited to the smallest possible surface area, administrative access should flow through a controlled management path, and database access should never be exposed directly to the public internet.
+
+            ### Web Subnet Logic
+
+            The web subnet is the public-facing layer of the environment. If the lab hosts a website or application front end, this is the subnet that would be allowed to receive limited inbound traffic from the internet, such as HTTP or HTTPS.
+
+            The web subnet should not have broad access to the rest of the environment. Its purpose is to receive user-facing traffic and, when necessary, pass application requests deeper into the environment. Any access from the web subnet to internal subnets should be specific and justified.
+
+            In a real environment, the web tier would often sit behind a load balancer, application gateway, firewall, or WAF instead of being directly exposed.
+
+            ### App Subnet Logic
+
+            The app subnet is the internal application layer. This is where application servers or backend services would live.
+
+            The app subnet should generally not be directly public-facing. Instead, it should receive traffic from the web tier only on the ports required by the application. Its role is to process business logic and communicate with the database tier when needed.
+
+            The app subnet may be allowed to communicate with the database subnet, but only on the specific database ports required. It should not have unrestricted access to the database subnet or management subnet.
+
+            ### Database Subnet Logic
+
+            The database subnet is the most restricted workload subnet. It should deny all public inbound traffic and should never be directly accessible from the internet.
+
+            The database subnet should only allow inbound traffic from trusted internal sources, usually the app subnet, and only on the specific database port required. For example, if the app tier needs to query a database, the database NSG would allow that traffic from the app subnet only.
+
+            The database subnet should not allow inbound traffic from the web subnet directly unless there is a specific architectural reason, which would usually be avoided in a properly tiered design.
+
+            ### Management Subnet Logic
+
+            The management subnet is used for administrative access into the environment. This subnet represents the controlled administration path.
+
+            Administrative protocols such as RDP, SSH, or management tooling should not be exposed broadly to the public internet. Instead, they should only be reachable from a trusted source, such as a VPN connection, Bastion host, jump box, or simulated on-premises network.
+
+            The management subnet may be allowed to reach web, app, and database resources for configuration and troubleshooting, but this access should still be scoped carefully. The goal is to centralize administration rather than allowing direct public management access to every workload.
+
+            ### Overall Traffic Flow
+
+            The intended traffic flow is:
+
+            Internet users should only reach the public-facing web layer.
+
+            The web layer may communicate with the app layer when required.
+
+            The app layer may communicate with the database layer when required.
+
+            The database layer should only accept traffic from approved internal sources.
+
+            Administrative access should come through the management subnet or another controlled management path.
+
+            No subnet should allow broad any-to-any access unless it is explicitly justified for the lab.
+
+            ### Web vs App Subnet Difference
+
+            The web subnet is for services that receive user-facing traffic, such as a website, reverse proxy, load balancer target, or front-end server.
+
+            The app subnet is for backend application logic that should not be directly exposed to the internet. It handles processing, APIs, business logic, or services that support the web tier.
+
+            In a simple lab, the web and app roles may feel similar because one VM could technically do both. However, separating them shows a more mature design. It demonstrates that public entry points and internal application logic are treated as different trust zones.
+
+            ### Design Principle
+
+            Each NSG should answer a security question:
+
+            - Who needs to reach this subnet?
+            - From where?
+            - On what port?
+            - For what purpose?
+            - Can this access be narrowed further?
+
+            If there is no clear answer, the traffic should not be allowed.
+        }
+
+
+
 # Naming Convention
 
 Starting this project by manualy scoping naming conventions 
 
 Later will add local.tf file to dynamically named resources based on convention and to feel the difference.
 <project>-<lab>-<resource-type>-<environment>
-
-
-
-# Lab Description
 
 
 

@@ -35,6 +35,7 @@ module "networking" {
   vnet_name            = var.vnet_name
   vnet_address_space   = var.vnet_address_space
   subnets              = var.subnets
+  nsgs                 = var.nsgs
 
   # Pass resource group info
   resource_group_name = azurerm_resource_group.rg.name

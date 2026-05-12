@@ -19,3 +19,9 @@ variable "subnets" {
     address_prefix = string
   }))
 }
+
+variable "nsgs" {
+  type = list(object({
+    name = string
+  }))
+}
