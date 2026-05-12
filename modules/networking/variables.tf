@@ -6,12 +6,11 @@ variable "vnet_address_space" {
   type = list(string)
 }
 
-variable "subnet_name" {
-  type = string
-}
-
-variable "subnet_address_space" {
-  type = list(string)
+variable "subnets" {
+  type = list(object({
+    name           = string
+    address_prefix = string
+  }))
 }
 
 variable "resource_group_name" {
